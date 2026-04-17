@@ -5,47 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+img {
+    width: 100%;
+    border-radius: 10px;
+}
+</style>
+
 </head>
 
 <body>
 
-<div id="loader"><div class="spinner"></div></div>
-
 <div class="navbar">
-<h2>Expo</h2>
+<h2>Expo 2026</h2>
 <div>
 <a href="index.html">Home</a>
 <a href="about.html">About</a>
-<button class="btn" onclick="toggleMode()">🌙</button>
 </div>
 </div>
 
-<div class="section-title">Problems</div>
+<div class="section-title">50 Real-World Problems & Solutions</div>
 
-<div class="grid">
-<div class="card problem">
-<h3><i class="fa-solid fa-wallet"></i> Overspending</h3>
-<p>Managing expenses is difficult</p>
-<a href="solution1.html">
-<button class="btn" onclick="interact('Opening solution')">View</button>
-</a>
-</div>
-</div>
-
-<div id="toast"></div>
+<div class="grid" id="problemContainer"></div>
 
 <script>
-function toggleMode(){document.body.classList.toggle("light-mode");}
+const problems = [
 
-function interact(msg){
-let t=document.getElementById("toast");
-t.innerText=msg;
-t.style.display="block";
-setTimeout(()=>t.style.display="none",2000);
-}
+{title:"Overspending",img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f",problem:"People fail to track daily expenses",solution:"Create a smart budgeting web app with alerts and reports"},
+{title:"Manual Banking",img:"https://images.unsplash.com/photo-1565514020179-026b92b2d88d",problem:"Banking tasks are slow and manual",solution:"Develop an online banking system for quick transactions"},
+{title:"Lack of Learning",img:"https://images.unsplash.com/photo-1513258496099-48168024aec0",problem:"Students lack access to quality resources",solution:"Build an e-learning platform with video lessons"},
+{title:"Job Search Difficulty",img:"https://images.unsplash.com/photo-1551836022-d5d88e9218df",problem:"People struggle to find jobs",solution:"Create a job portal with filtering options"},
+{title:"Traffic Congestion",img:"https://images.unsplash.com/photo-1502877338535-766e1452684a",problem:"Heavy traffic in cities",solution:"Smart traffic management system using data"},
+{title:"Food Waste",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836",problem:"Food is wasted daily",solution:"App to donate excess food to needy"},
+{title:"Health Monitoring",img:"https://images.unsplash.com/photo-1576091160550-2173dba999ef",problem:"People ignore health tracking",solution:"Health tracking app with reminders"},
+{title:"Fake News",img:"https://images.unsplash.com/photo-1504711434969-e33886168f5c",problem:"Spread of misinformation",solution:"AI-based news verification system"},
+{title:"Online Fraud",img:"https://images.unsplash.com/photo-1556740749-887f6717d7e4",problem:"Increasing online scams",solution:"Fraud detection system using algorithms"},
+{title:"Water Scarcity",img:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6",problem:"Water shortage in areas",solution:"Smart water management system"},
 
-window.onload=()=>document.getElementById("loader").style.display="none";
+{title:"Electricity Waste",img:"https://images.unsplash.com/photo-1509395176047-4a66953fd231",problem:"Power is wasted unnecessarily",solution:"Smart energy monitoring system"},
+{title:"Paper Waste",img:"https://images.unsplash.com/photo-1581092335397-9583eb92d232",problem:"Excess paper usage",solution:"Digital documentation system"},
+{title:"Poor Communication",img:"https://images.unsplash.com/photo-1521791136064-7986c2920216",problem:"Communication gaps in teams",solution:"Team collaboration platform"},
+{title:"Time Management",img:"https://images.unsplash.com/photo-1506784365847-bbad939e9335",problem:"People waste time",solution:"Task management application"},
+{title:"Cyber Security",img:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b",problem:"Data breaches increasing",solution:"Security monitoring system"},
+{title:"Mental Health",img:"https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f",problem:"Stress and anxiety issues",solution:"Mental wellness app"},
+{title:"Transportation Delay",img:"https://images.unsplash.com/photo-1494412651409-8963ce7935a7",problem:"Late transport services",solution:"Real-time tracking system"},
+{title:"Low Productivity",img:"https://images.unsplash.com/photo-1492724441997-5dc865305da7",problem:"Work efficiency is low",solution:"Productivity tracking software"},
+{title:"Data Loss",img:"https://images.unsplash.com/photo-1518779578993-ec3579fee39f",problem:"Important files lost",solution:"Cloud backup system"},
+{title:"Online Education Issues",img:"https://images.unsplash.com/photo-1584697964403-6c3c1a6f8a3f",problem:"Difficult online learning",solution:"Interactive learning system"},
+
+{title:"Hospital Management",img:"https://images.unsplash.com/photo-1586773860418-d37222d8fce3",problem:"Manual hospital processes",solution:"Hospital management system"},
+{title:"Retail Management",img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30",problem:"Inventory mismanagement",solution:"Retail inventory system"},
+{title:"Student Tracking",img:"https://images.unsplash.com/photo-1523240795612-9a054b0db644",problem:"Attendance issues",solution:"Student tracking system"},
+{title:"Weather Prediction",img:"https://images.unsplash.com/photo-1504384308090-c894fdcc538d",problem:"Unpredictable weather",solution:"Weather forecasting app"},
+{title:"Parking Issues",img:"https://images.unsplash.com/photo-1506521781263-d8422e82f27a",problem:"No parking space info",solution:"Smart parking system"},
+{title:"Waste Management",img:"https://images.unsplash.com/photo-1509395176047-4a66953fd231",problem:"Garbage mismanagement",solution:"Smart waste tracking system"},
+{title:"E-commerce Trust",img:"https://images.unsplash.com/photo-1515168833906-d2a3b82b302a",problem:"Fake sellers",solution:"Verified seller platform"},
+{title:"Language Barrier",img:"https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d3",problem:"Communication issues",solution:"Language translation app"},
+{title:"Event Management",img:"https://images.unsplash.com/photo-1503428593586-e225b39bddfe",problem:"Poor event planning",solution:"Event management system"},
+{title:"Fitness Tracking",img:"https://images.unsplash.com/photo-1554284126-aa88f22d8b74",problem:"Lack of exercise tracking",solution:"Fitness tracking app"},
+
+{title:"Online Payments",img:"https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9",problem:"Payment failures",solution:"Secure payment gateway"},
+{title:"Customer Support",img:"https://images.unsplash.com/photo-1581091870622-5c0d3c9e5a5d",problem:"Slow response",solution:"AI chatbot support"},
+{title:"Library Access",img:"https://images.unsplash.com/photo-1521587760476-6c12a4b040da",problem:"Hard to find books",solution:"Digital library system"},
+{title:"Agriculture Issues",img:"https://images.unsplash.com/photo-1500937386664-56d1dfef3854",problem:"Farmers lack data",solution:"Smart agriculture system"},
+{title:"Tourism Info",img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",problem:"Lack of travel info",solution:"Tourism guide app"},
+{title:"Delivery Delays",img:"https://images.unsplash.com/photo-1521791136064-7986c2920216",problem:"Late deliveries",solution:"Tracking system"},
+{title:"Gaming Addiction",img:"https://images.unsplash.com/photo-1511512578047-dfb367046420",problem:"Excess gaming",solution:"Screen time monitor"},
+{title:"Smart Home",img:"https://images.unsplash.com/photo-1493666438817-866a91353ca9",problem:"Manual home control",solution:"IoT smart home system"},
+{title:"Crowd Management",img:"https://images.unsplash.com/photo-1492724441997-5dc865305da7",problem:"Crowd issues",solution:"Crowd monitoring system"},
+{title:"Public Safety",img:"https://images.unsplash.com/photo-1504384308090-c894fdcc538d",problem:"Low safety awareness",solution:"Emergency alert system"}
+
+];
+
+// RENDER
+const container = document.getElementById("problemContainer");
+
+problems.forEach(p => {
+container.innerHTML += `
+<div class="card problem">
+<img src="${p.img}">
+<h3>${p.title}</h3>
+<p><b>Problem:</b> ${p.problem}</p>
+<p><b>Solution:</b> ${p.solution}</p>
+</div>
+`;
+});
 </script>
 
 </body>

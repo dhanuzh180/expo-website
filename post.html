@@ -1,17 +1,104 @@
-<script>
-function addPost(){
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Post</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-firebase.firestore().collection("posts").add({
-title: title.value,
-problem: problem.value,
-solution: solution.value,
-img: img.value || "https://via.placeholder.com/300",
-created: new Date()
-})
-.then(()=>{
-alert("Posted!");
-window.location="index.html";
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    padding:20px;
+}
+
+input, textarea {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:none;
+    outline:none;
+    background:#1e293b;
+    color:white;
+}
+
+button {
+    width:100%;
+    padding:12px;
+    background:#2563EB;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+h2 {
+    text-align:center;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Create Post</h2>
+
+<input id="title" placeholder="Title (e.g. Overspending)">
+<input id="img" placeholder="Image URL (optional)">
+<textarea id="problem" placeholder="Write the problem..."></textarea>
+<textarea id="solution" placeholder="Write the solution..."></textarea>
+
+<button onclick="addPost()">Post</button>
+
+<!-- 🔥 FIREBASE -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
+  authDomain: "problemhub-76fbf.firebaseapp.com",
+  projectId: "problemhub-76fbf",
+  storageBucket: "problemhub-76fbf.firebasestorage.app",
+  messagingSenderId: "138908127292",
+  appId: "1:138908127292:web:8ee821465df09575eb7339",
+  measurementId: "G-R9LEPW3023"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🚀 ADD POST FUNCTION
+window.addPost = async function(){
+
+const title = document.getElementById("title").value;
+const img = document.getElementById("img").value || "https://via.placeholder.com/400";
+const problem = document.getElementById("problem").value;
+const solution = document.getElementById("solution").value;
+
+if(!title || !problem || !solution){
+    alert("Please fill all fields");
+    return;
+}
+
+await addDoc(collection(db, "posts"), {
+    title,
+    img,
+    problem,
+    solution,
+    created: new Date()
 });
 
+alert("Post added successfully!");
+
+window.location = "index.html";
 }
+
 </script>
+
+</body>
+</html>

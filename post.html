@@ -90,6 +90,8 @@ await addDoc(collection(db, "posts"), {
     img,
     problem,
     solution,
+    user: localStorage.getItem("username") || "Anonymous",
+    likes: 0,
     created: new Date()
 });
 

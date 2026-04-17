@@ -1,13 +1,44 @@
-<script>
-function signup(){
-const email = user.value + "@app.com";
-const password = pass.value;
+<!DOCTYPE html>
+<html>
+<head>
+<title>Signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
-firebase.auth().createUserWithEmailAndPassword(email, password)
+<body>
+
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="signup()">Signup</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.signup = function(){
+const email = email.value;
+const pass = pass.value;
+
+createUserWithEmailAndPassword(auth, email, pass)
 .then(()=>{
-alert("Account created!");
+alert("Account created");
 window.location="login.html";
 })
 .catch(e=>alert(e.message));
 }
+
 </script>
+
+</body>
+</html>

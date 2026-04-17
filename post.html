@@ -1,0 +1,17 @@
+<script>
+function addPost(){
+
+firebase.firestore().collection("posts").add({
+title: title.value,
+problem: problem.value,
+solution: solution.value,
+img: img.value || "https://via.placeholder.com/300",
+created: new Date()
+})
+.then(()=>{
+alert("Posted!");
+window.location="index.html";
+});
+
+}
+</script>

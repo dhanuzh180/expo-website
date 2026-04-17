@@ -19,14 +19,8 @@ body {
 .navbar {
     display:flex;
     justify-content:space-between;
-    align-items:center;
     padding:15px;
     background:#020617;
-    border-bottom:1px solid #1e293b;
-}
-
-.navbar h2 {
-    margin:0;
 }
 
 .navbar a {
@@ -41,7 +35,7 @@ body {
     margin:auto;
 }
 
-/* POST CARD */
+/* POST */
 .post {
     background:#020617;
     border:1px solid #1e293b;
@@ -50,7 +44,6 @@ body {
     overflow:hidden;
 }
 
-/* HEADER */
 .post-header {
     display:flex;
     align-items:center;
@@ -66,40 +59,16 @@ body {
     align-items:center;
     justify-content:center;
     margin-right:10px;
-    font-weight:bold;
 }
 
-/* IMAGE */
 .post img {
     width:100%;
     height:250px;
     object-fit:cover;
 }
 
-/* CONTENT */
 .post-content {
     padding:10px;
-}
-
-/* ACTIONS */
-.actions {
-    display:flex;
-    justify-content:space-between;
-    padding:10px;
-}
-
-.actions i {
-    cursor:pointer;
-}
-
-/* INPUT */
-textarea {
-    width:100%;
-    padding:10px;
-    border:none;
-    outline:none;
-    background:#0f172a;
-    color:white;
 }
 
 </style>
@@ -113,48 +82,60 @@ textarea {
 
 <div>
 <a href="post.html"><i class="fa-solid fa-plus"></i></a>
-<a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a>
 <a href="profile.html"><i class="fa-solid fa-user"></i></a>
 </div>
 </div>
 
 <div id="feed"></div>
 
-<script>
+<!-- ✅ FIREBASE FULL SETUP -->
+<script type="module">
 
-let posts = JSON.parse(localStorage.getItem("posts")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
+  authDomain: "problemhub-76fbf.firebaseapp.com",
+  projectId: "problemhub-76fbf",
+  storageBucket: "problemhub-76fbf.firebasestorage.app",
+  messagingSenderId: "138908127292",
+  appId: "1:138908127292:web:8ee821465df09575eb7339",
+  measurementId: "G-R9LEPW3023"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔥 LOAD POSTS FROM DATABASE
 const feed = document.getElementById("feed");
 
-posts.forEach(p => {
+const q = query(collection(db, "posts"), orderBy("created", "desc"));
 
-feed.innerHTML += `
-<div class="post">
+onSnapshot(q, (snapshot) => {
+    feed.innerHTML = "";
 
-    <div class="post-header">
-        <div class="avatar">${p.title.charAt(0)}</div>
-        <b>${p.title}</b>
-    </div>
+    snapshot.forEach((doc) => {
+        const p = doc.data();
 
-    <img src="${p.img}">
+        feed.innerHTML += `
+        <div class="post">
 
-    <div class="post-content">
-        <p><b>Problem:</b> ${p.problem}</p>
-        <p><b>Solution:</b> ${p.solution}</p>
-    </div>
+            <div class="post-header">
+                <div class="avatar">${p.title?.charAt(0) || "U"}</div>
+                <b>${p.title}</b>
+            </div>
 
-    <div class="actions">
-        <div>
-            <i class="fa-regular fa-heart"></i>
-            <i class="fa-regular fa-comment"></i>
-            <i class="fa-regular fa-share-from-square"></i>
+            <img src="${p.img}">
+
+            <div class="post-content">
+                <p><b>Problem:</b> ${p.problem}</p>
+                <p><b>Solution:</b> ${p.solution}</p>
+            </div>
+
         </div>
-        <i class="fa-regular fa-bookmark"></i>
-    </div>
-
-</div>
-`;
-
+        `;
+    });
 });
 
 </script>

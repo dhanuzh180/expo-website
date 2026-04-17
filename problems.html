@@ -1,39 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Problems</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<title>Problems</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
+<div id="loader"><div class="spinner"></div></div>
+
 <div class="navbar">
-    <h2>Expo 2026</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="problems.html">Problems</a>
-        <a href="about.html">About</a>
-    </div>
+<h2>Expo</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<button class="btn" onclick="toggleMode()">🌙</button>
+</div>
 </div>
 
-<div class="section-title">Explore Problems</div>
+<div class="section-title">Problems</div>
 
 <div class="grid">
-
-    <div class="card problem">
-        <h3>💸 Overspending</h3>
-        <p>Difficulty managing expenses</p>
-        <a href="solution1.html"><button class="btn">View Solution</button></a>
-    </div>
-
-    <div class="card problem">
-        <h3>🏦 Manual Banking</h3>
-        <p>Slow traditional processes</p>
-        <button class="btn">Coming Soon</button>
-    </div>
-
+<div class="card problem">
+<h3><i class="fa-solid fa-wallet"></i> Overspending</h3>
+<p>Managing expenses is difficult</p>
+<a href="solution1.html">
+<button class="btn" onclick="interact('Opening solution')">View</button>
+</a>
 </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function toggleMode(){document.body.classList.toggle("light-mode");}
+
+function interact(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",2000);
+}
+
+window.onload=()=>document.getElementById("loader").style.display="none";
+</script>
 
 </body>
 </html>

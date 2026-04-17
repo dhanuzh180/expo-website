@@ -1,71 +1,162 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Expo 2026</title>
+<title>ProblemHub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body {
+    margin:0;
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    background:#020617;
+    border-bottom:1px solid #1e293b;
+}
+
+.navbar h2 {
+    margin:0;
+}
+
+.navbar a {
+    color:white;
+    margin-left:15px;
+    font-size:20px;
+}
+
+/* FEED */
+#feed {
+    max-width:500px;
+    margin:auto;
+}
+
+/* POST CARD */
+.post {
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:12px;
+    margin:20px;
+    overflow:hidden;
+}
+
+/* HEADER */
+.post-header {
+    display:flex;
+    align-items:center;
+    padding:10px;
+}
+
+.avatar {
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#2563EB;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-right:10px;
+    font-weight:bold;
+}
+
+/* IMAGE */
+.post img {
+    width:100%;
+    height:250px;
+    object-fit:cover;
+}
+
+/* CONTENT */
+.post-content {
+    padding:10px;
+}
+
+/* ACTIONS */
+.actions {
+    display:flex;
+    justify-content:space-between;
+    padding:10px;
+}
+
+.actions i {
+    cursor:pointer;
+}
+
+/* INPUT */
+textarea {
+    width:100%;
+    padding:10px;
+    border:none;
+    outline:none;
+    background:#0f172a;
+    color:white;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div id="loader">
-<div class="spinner"></div>
-<p>Loading...</p>
-</div>
-
 <div class="navbar">
-<h2>Expo 2026</h2>
+<h2>ProblemHub</h2>
+
 <div>
-<a href="index.html">Home</a>
-<a href="problems.html">Problems</a>
-<a href="about.html">About</a>
-<button class="btn" onclick="toggleMode()">🌙</button>
+<a href="post.html"><i class="fa-solid fa-plus"></i></a>
+<a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a>
+<a href="profile.html"><i class="fa-solid fa-user"></i></a>
 </div>
 </div>
 
-<div class="hero">
-<h1><i class="fa-solid fa-lightbulb"></i> Solving Real Problems</h1>
-<p>Turning problems into smart solutions</p>
-
-<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" width="300">
-
-<br><br>
-
-<a href="problems.html">
-<button class="btn" onclick="interact('Exploring problems...')">Explore</button>
-</a>
-</div>
-
-<div class="grid">
-<div class="card"><h3>👀 Visitors</h3><h2 id="visitors">120</h2></div>
-<div class="card"><h3>🔥 Live Users</h3><h2 id="liveUsers">5</h2></div>
-<div class="card"><h3>📈 Projects</h3><h2 id="projects">45</h2></div>
-</div>
-
-<div id="toast"></div>
+<div id="feed"></div>
 
 <script>
-function toggleMode(){
-document.body.classList.toggle("light-mode");
-}
 
-function interact(msg){
-let t=document.getElementById("toast");
-t.innerText=msg;
-t.style.display="block";
-setTimeout(()=>t.style.display="none",2000);
-}
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
 
-let v=120,l=5,p=45;
+const feed = document.getElementById("feed");
 
-setInterval(()=>{v++;document.getElementById("visitors").innerText=v;},3000);
-setInterval(()=>{l=Math.floor(Math.random()*10)+1;document.getElementById("liveUsers").innerText=l;},2000);
-setInterval(()=>{p+=2;document.getElementById("projects").innerText=p;},4000);
+posts.forEach(p => {
 
-window.onload=()=>document.getElementById("loader").style.display="none";
+feed.innerHTML += `
+<div class="post">
+
+    <div class="post-header">
+        <div class="avatar">${p.title.charAt(0)}</div>
+        <b>${p.title}</b>
+    </div>
+
+    <img src="${p.img}">
+
+    <div class="post-content">
+        <p><b>Problem:</b> ${p.problem}</p>
+        <p><b>Solution:</b> ${p.solution}</p>
+    </div>
+
+    <div class="actions">
+        <div>
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-share-from-square"></i>
+        </div>
+        <i class="fa-regular fa-bookmark"></i>
+    </div>
+
+</div>
+`;
+
+});
+
 </script>
 
 </body>

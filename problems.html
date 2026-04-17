@@ -12,7 +12,6 @@ img {
     border-radius: 10px;
 }
 
-/* CATEGORY BUTTONS */
 .filters {
     text-align: center;
     margin: 20px;
@@ -26,10 +25,6 @@ img {
     color: white;
     border-radius: 6px;
     cursor: pointer;
-}
-
-.filters button:hover {
-    background: #1E40AF;
 }
 </style>
 
@@ -47,7 +42,6 @@ img {
 
 <div class="section-title">Problems by Category</div>
 
-<!-- FILTER BUTTONS -->
 <div class="filters">
 <button onclick="filterProblems('all')">All</button>
 <button onclick="filterProblems('Finance')">Finance</button>
@@ -61,34 +55,20 @@ img {
 <script>
 
 const problems = [
-
-{title:"Overspending",category:"Finance",img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f",problem:"Poor expense tracking",solution:"Budget tracking app"},
-
-{title:"Online Fraud",category:"Finance",img:"https://images.unsplash.com/photo-1556740749-887f6717d7e4",problem:"Rising scams",solution:"Fraud detection system"},
-
-{title:"Manual Banking",category:"Finance",img:"https://images.unsplash.com/photo-1565514020179-026b92b2d88d",problem:"Slow banking",solution:"Online banking"},
-
-{title:"Cyber Security",category:"Technology",img:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b",problem:"Data breaches",solution:"Security systems"},
-
-{title:"Fake News",category:"Technology",img:"https://images.unsplash.com/photo-1504711434969-e33886168f5c",problem:"Misinformation",solution:"AI verification"},
-
-{title:"Data Loss",category:"Technology",img:"https://images.unsplash.com/photo-1518779578993-ec3579fee39f",problem:"Lost files",solution:"Cloud backup"},
-
-{title:"Health Monitoring",category:"Health",img:"https://images.unsplash.com/photo-1576091160550-2173dba999ef",problem:"No tracking",solution:"Health app"},
-
-{title:"Mental Health",category:"Health",img:"https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f",problem:"Stress issues",solution:"Wellness app"},
-
-{title:"Fitness Tracking",category:"Health",img:"https://images.unsplash.com/photo-1554284126-aa88f22d8b74",problem:"No fitness tracking",solution:"Fitness app"},
-
-{title:"Lack of Learning",category:"Education",img:"https://images.unsplash.com/photo-1513258496099-48168024aec0",problem:"No resources",solution:"E-learning platform"},
-
+{title:"Overspending",category:"Finance",img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f",problem:"People fail to track expenses properly",solution:"A budgeting app tracks spending and gives alerts"},
+{title:"Online Fraud",category:"Finance",img:"https://images.unsplash.com/photo-1556740749-887f6717d7e4",problem:"Increasing online scams",solution:"Fraud detection system using monitoring"},
+{title:"Manual Banking",category:"Finance",img:"https://images.unsplash.com/photo-1565514020179-026b92b2d88d",problem:"Slow banking process",solution:"Online banking system"},
+{title:"Cyber Security",category:"Technology",img:"https://images.unsplash.com/photo-1550751827-4bd374c3f58b",problem:"Data breaches",solution:"Security tools detect threats"},
+{title:"Fake News",category:"Technology",img:"https://images.unsplash.com/photo-1504711434969-e33886168f5c",problem:"Misinformation spread",solution:"AI verifies content"},
+{title:"Data Loss",category:"Technology",img:"https://images.unsplash.com/photo-1518779578993-ec3579fee39f",problem:"Loss of important files",solution:"Cloud backup system"},
+{title:"Health Monitoring",category:"Health",img:"https://images.unsplash.com/photo-1576091160550-2173dba999ef",problem:"No health tracking",solution:"Health app with reminders"},
+{title:"Mental Health",category:"Health",img:"https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f",problem:"Stress issues",solution:"Mental wellness app"},
+{title:"Fitness Tracking",category:"Health",img:"https://images.unsplash.com/photo-1554284126-aa88f22d8b74",problem:"No fitness discipline",solution:"Fitness tracking app"},
+{title:"Lack of Learning",category:"Education",img:"https://images.unsplash.com/photo-1513258496099-48168024aec0",problem:"No access to resources",solution:"E-learning platform"},
 {title:"Student Tracking",category:"Education",img:"https://images.unsplash.com/photo-1523240795612-9a054b0db644",problem:"Attendance issues",solution:"Tracking system"},
-
-{title:"Online Education Issues",category:"Education",img:"https://images.unsplash.com/photo-1584697964403-6c3c1a6f8a3f",problem:"Low engagement",solution:"Interactive learning"}
-
+{title:"Online Education",category:"Education",img:"https://images.unsplash.com/photo-1584697964403-6c3c1a6f8a3f",problem:"Low engagement",solution:"Interactive tools"}
 ];
 
-// FUNCTION TO DISPLAY
 function displayProblems(list){
 const container = document.getElementById("problemContainer");
 container.innerHTML = "";
@@ -100,13 +80,16 @@ container.innerHTML += `
 <h3>${p.title}</h3>
 <p><b>Category:</b> ${p.category}</p>
 <p><b>Problem:</b> ${p.problem}</p>
-<p><b>Solution:</b> ${p.solution}</p>
+
+<a href="solution1.html?title=${encodeURIComponent(p.title)}&img=${encodeURIComponent(p.img)}&category=${encodeURIComponent(p.category)}&problem=${encodeURIComponent(p.problem)}&solution=${encodeURIComponent(p.solution)}">
+<button class="btn">View Details</button>
+</a>
+
 </div>
 `;
 });
 }
 
-// FILTER FUNCTION
 function filterProblems(category){
 if(category === "all"){
 displayProblems(problems);
@@ -116,7 +99,6 @@ displayProblems(filtered);
 }
 }
 
-// LOAD ALL FIRST
 displayProblems(problems);
 
 </script>

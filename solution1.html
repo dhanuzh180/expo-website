@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Solution</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<title>Solution</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
+<div id="loader"><div class="spinner"></div></div>
+
 <div class="navbar">
-    <h2>Expo 2026</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="problems.html">Problems</a>
-        <a href="about.html">About</a>
-    </div>
+<h2>Expo</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="problems.html">Problems</a>
+<button class="btn" onclick="toggleMode()">🌙</button>
+</div>
 </div>
 
 <div class="section-title">Smart Budget App</div>
 
+<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f" width="300">
+
 <div class="grid">
-
-    <div class="card solution">
-        <h3>Problem</h3>
-        <p>Overspending due to lack of tracking</p>
-    </div>
-
-    <div class="card solution">
-        <h3>Solution</h3>
-        <p>A web app that tracks expenses and gives alerts</p>
-    </div>
-
-    <div class="card solution">
-        <h3>Features</h3>
-        <p>Tracking, Alerts, Reports</p>
-    </div>
-
-    <div class="card solution">
-        <h3>Technology</h3>
-        <p>HTML, CSS, JavaScript</p>
-    </div>
-
+<div class="card solution"><h3>Problem</h3><p>Overspending</p></div>
+<div class="card solution"><h3>Solution</h3><p>Expense tracker</p></div>
+<div class="card solution"><h3>Tech</h3><p>HTML CSS JS</p></div>
 </div>
+
+<script>
+function toggleMode(){document.body.classList.toggle("light-mode");}
+window.onload=()=>document.getElementById("loader").style.display="none";
+</script>
 
 </body>
 </html>

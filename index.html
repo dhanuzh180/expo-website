@@ -1,52 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expo 2026</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<title>Expo 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
 
+<div id="loader">
+<div class="spinner"></div>
+<p>Loading...</p>
+</div>
+
 <div class="navbar">
-    <h2>Expo 2026</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="problems.html">Problems</a>
-        <a href="about.html">About</a>
-    </div>
+<h2>Expo 2026</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="problems.html">Problems</a>
+<a href="about.html">About</a>
+<button class="btn" onclick="toggleMode()">🌙</button>
+</div>
 </div>
 
 <div class="hero">
-    <h1>Solving Real-World Problems</h1>
-    <p>We identify real challenges and build smart digital solutions</p>
-    <a href="problems.html">
-        <button class="btn">Explore Problems</button>
-    </a>
-</div>
+<h1><i class="fa-solid fa-lightbulb"></i> Solving Real Problems</h1>
+<p>Turning problems into smart solutions</p>
 
-<div class="section-title">Featured Problems</div>
+<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" width="300">
+
+<br><br>
+
+<a href="problems.html">
+<button class="btn" onclick="interact('Exploring problems...')">Explore</button>
+</a>
+</div>
 
 <div class="grid">
-    <div class="card problem">
-        <h3>💸 Overspending</h3>
-        <p>People struggle to manage expenses</p>
-    </div>
-
-    <div class="card problem">
-        <h3>🏦 Manual Banking</h3>
-        <p>Traditional banking is slow</p>
-    </div>
-
-    <div class="card problem">
-        <h3>📚 Learning Access</h3>
-        <p>Lack of easy learning platforms</p>
-    </div>
+<div class="card"><h3>👀 Visitors</h3><h2 id="visitors">120</h2></div>
+<div class="card"><h3>🔥 Live Users</h3><h2 id="liveUsers">5</h2></div>
+<div class="card"><h3>📈 Projects</h3><h2 id="projects">45</h2></div>
 </div>
 
-<div class="footer">
-    © 2026 BCom IT Expo Project
-</div>
+<div id="toast"></div>
+
+<script>
+function toggleMode(){
+document.body.classList.toggle("light-mode");
+}
+
+function interact(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",2000);
+}
+
+let v=120,l=5,p=45;
+
+setInterval(()=>{v++;document.getElementById("visitors").innerText=v;},3000);
+setInterval(()=>{l=Math.floor(Math.random()*10)+1;document.getElementById("liveUsers").innerText=l;},2000);
+setInterval(()=>{p+=2;document.getElementById("projects").innerText=p;},4000);
+
+window.onload=()=>document.getElementById("loader").style.display="none";
+</script>
 
 </body>
 </html>

@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Solution</title>
+<title>Solution Details</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+.container {
+    padding: 20px;
+}
+</style>
+
 </head>
 
 <body>
 
-<div id="loader"><div class="spinner"></div></div>
-
 <div class="navbar">
-<h2>Expo</h2>
+<h2>Expo 2026</h2>
 <div>
 <a href="index.html">Home</a>
 <a href="problems.html">Problems</a>
-<button class="btn" onclick="toggleMode()">🌙</button>
 </div>
 </div>
 
-<div class="section-title">Smart Budget App</div>
-
-<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f" width="300">
-
-<div class="grid">
-<div class="card solution"><h3>Problem</h3><p>Overspending</p></div>
-<div class="card solution"><h3>Solution</h3><p>Expense tracker</p></div>
-<div class="card solution"><h3>Tech</h3><p>HTML CSS JS</p></div>
-</div>
+<div class="container" id="solutionContainer"></div>
 
 <script>
-function toggleMode(){document.body.classList.toggle("light-mode");}
-window.onload=()=>document.getElementById("loader").style.display="none";
+
+// GET DATA FROM URL
+const params = new URLSearchParams(window.location.search);
+
+const title = params.get("title");
+const img = params.get("img");
+const category = params.get("category");
+const problem = params.get("problem");
+const solution = params.get("solution");
+
+// DISPLAY DATA
+document.getElementById("solutionContainer").innerHTML = `
+    <h2>${title}</h2>
+    <p><b>Category:</b> ${category}</p>
+
+    <img src="${img}">
+
+    <h3>Problem Explanation</h3>
+    <p>${problem}</p>
+
+    <h3>Solution Explanation</h3>
+    <p>${solution}</p>
+`;
+
 </script>
 
 </body>

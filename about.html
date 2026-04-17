@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>About</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<title>About</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<div id="loader"><div class="spinner"></div></div>
+
 <div class="navbar">
-    <h2>Expo 2026</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="problems.html">Problems</a>
-        <a href="about.html">About</a>
-    </div>
+<h2>Expo</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="problems.html">Problems</a>
+<button class="btn" onclick="toggleMode()">🌙</button>
+</div>
 </div>
 
-<div class="section-title">About This Project</div>
+<div class="section-title">About</div>
 
 <div class="grid">
-    <div class="card">
-        <h3>Student</h3>
-        <p>Your Name</p>
-    </div>
-
-    <div class="card">
-        <h3>Course</h3>
-        <p>BCom IT</p>
-    </div>
-
-    <div class="card">
-        <h3>Goal</h3>
-        <p>Solving real-world problems using technology</p>
-    </div>
+<div class="card"><h3>Name</h3><p>Your Name</p></div>
+<div class="card"><h3>Course</h3><p>BCom IT</p></div>
 </div>
+
+<script>
+function toggleMode(){document.body.classList.toggle("light-mode");}
+window.onload=()=>document.getElementById("loader").style.display="none";
+</script>
 
 </body>
 </html>

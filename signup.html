@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Signup</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up • ProblemHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; }
+        .login-box { width: 350px; background: #000; border: 1px solid #262626; padding: 40px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 5px 0; background: #121212; border: 1px solid #262626; color: white; border-radius: 3px; box-sizing: border-box; }
+    </style>
 </head>
-
 <body>
+    <div class="login-box">
+        <h1 style="font-family: Arial; margin-bottom: 30px; color: white;">ProblemHub</h1>
+        
+        <input id="regEmail" type="email" placeholder="Email address">
+        <input id="regPass" type="password" placeholder="Password">
+        
+        <button class="ig-btn" style="width: 100%; margin-top: 15px;" onclick="signup()">Sign Up</button>
+        
+        <p style="margin-top: 30px; color: #a8a8a8; font-size: 14px;">
+            Have an account? <a href="login.html" style="color: #0095f6; text-decoration: none; font-weight: 600;">Log in</a>
+        </p>
+    </div>
 
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
+    <script type="module">
+        // 1. Import the shared config
+        import { auth } from './firebase-config.js';
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-<button onclick="signup()">Signup</button>
+        // 2. Attach function to 'window' so the button can see it
+        window.signup = async function() {
+            const email = document.getElementById("regEmail").value;
+            const pass = document.getElementById("regPass").value;
 
-<script type="module">
+            if (!email || !pass) {
+                alert("Please enter both email and password.");
+                return;
+            }
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+            console.log("Attempting signup for:", email);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
-  authDomain: "problemhub-76fbf.firebaseapp.com",
-  projectId: "problemhub-76fbf",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.signup = function(){
-const email = email.value;
-const pass = pass.value;
-
-createUserWithEmailAndPassword(auth, email, pass)
-.then(()=>{
-alert("Account created");
-window.location="login.html";
-})
-.catch(e=>alert(e.message));
-}
-
-</script>
-
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                console.log("User created:", userCredential.user);
+                
+                // Save username (part of email before @)
+                localStorage.setItem("username", email.split('@')[0]);
+                
+                alert("Account created successfully!");
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Signup Error Code:", error.code);
+                console.error("Signup Error Message:", error.message);
+                
+                // Friendly error messages
+                if (error.code === 'auth/email-already-in-use') alert("This email is already registered!");
+                else if (error.code === 'auth/weak-password') alert("Password should be at least 6 characters.");
+                else alert("Signup failed: " + error.message);
+            }
+        };
+    </script>
 </body>
 </html>

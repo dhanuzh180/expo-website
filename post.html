@@ -1,101 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Create Post</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-padding:20px;
-}
-
-input, textarea{
-width:100%;
-padding:12px;
-margin:10px 0;
-background:#1e293b;
-border:none;
-color:white;
-border-radius:8px;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#2563EB;
-color:white;
-border:none;
-border-radius:8px;
-}
-</style>
-</head>
-
 <body>
 
-<h2>Create Post</h2>
-
-<input id="title" placeholder="Title">
-<textarea id="problem" placeholder="Problem"></textarea>
-<textarea id="solution" placeholder="Solution"></textarea>
-
+<input id="title">
 <input type="file" id="file">
+<textarea id="problem"></textarea>
+<textarea id="solution"></textarea>
 
 <button onclick="addPost()">Post</button>
 
 <script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_ID",
-  storageBucket: "YOUR_BUCKET"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+import { db, storage } from "./firebase-config.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
 window.addPost = async function(){
 
-const title = document.getElementById("title").value;
-const problem = document.getElementById("problem").value;
-const solution = document.getElementById("solution").value;
-const file = document.getElementById("file").files[0];
-
-if(!title || !problem || !solution){
-alert("Fill all fields");
-return;
-}
-
-let imageUrl = "";
+let file=fileInput.files[0];
+let url="";
 
 if(file){
-const storageRef = ref(storage, "images/" + file.name);
-await uploadBytes(storageRef, file);
-imageUrl = await getDownloadURL(storageRef);
+let r=ref(storage,"img/"+file.name);
+await uploadBytes(r,file);
+url=await getDownloadURL(r);
 }
 
 await addDoc(collection(db,"posts"),{
-title,
-problem,
-solution,
-img: imageUrl,
-user: localStorage.getItem("username"),
-likes: 0,
-created: new Date()
+title:title.value,
+problem:problem.value,
+solution:solution.value,
+img:url
 });
 
-alert("Posted!");
 window.location="index.html";
 }
-
 </script>
 
 </body>

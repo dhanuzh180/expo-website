@@ -1,103 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Post</title>
+<title>Create Post</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-    margin:0;
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-    padding:20px;
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+padding:20px;
 }
 
-input, textarea {
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:none;
-    outline:none;
-    background:#1e293b;
-    color:white;
+input, textarea{
+width:100%;
+padding:12px;
+margin:10px 0;
+background:#1e293b;
+border:none;
+color:white;
+border-radius:8px;
 }
 
-button {
-    width:100%;
-    padding:12px;
-    background:#2563EB;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-h2 {
-    text-align:center;
+button{
+width:100%;
+padding:12px;
+background:#2563EB;
+color:white;
+border:none;
+border-radius:8px;
 }
 </style>
-
 </head>
 
 <body>
 
 <h2>Create Post</h2>
 
-<input id="title" placeholder="Title (e.g. Overspending)">
-<input id="img" placeholder="Image URL (optional)">
-<textarea id="problem" placeholder="Write the problem..."></textarea>
-<textarea id="solution" placeholder="Write the solution..."></textarea>
+<input id="title" placeholder="Title">
+<textarea id="problem" placeholder="Problem"></textarea>
+<textarea id="solution" placeholder="Solution"></textarea>
+
+<input type="file" id="file">
 
 <button onclick="addPost()">Post</button>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
-  authDomain: "problemhub-76fbf.firebaseapp.com",
-  projectId: "problemhub-76fbf",
-  storageBucket: "problemhub-76fbf.firebasestorage.app",
-  messagingSenderId: "138908127292",
-  appId: "1:138908127292:web:8ee821465df09575eb7339",
-  measurementId: "G-R9LEPW3023"
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_ID",
+  storageBucket: "YOUR_BUCKET"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-// 🚀 ADD POST FUNCTION
 window.addPost = async function(){
 
 const title = document.getElementById("title").value;
-const img = document.getElementById("img").value || "https://via.placeholder.com/400";
 const problem = document.getElementById("problem").value;
 const solution = document.getElementById("solution").value;
+const file = document.getElementById("file").files[0];
 
 if(!title || !problem || !solution){
-    alert("Please fill all fields");
-    return;
+alert("Fill all fields");
+return;
 }
 
-await addDoc(collection(db, "posts"), {
-    title,
-    img,
-    problem,
-    solution,
-    user: localStorage.getItem("username") || "Anonymous",
-    likes: 0,
-    created: new Date()
+let imageUrl = "";
+
+if(file){
+const storageRef = ref(storage, "images/" + file.name);
+await uploadBytes(storageRef, file);
+imageUrl = await getDownloadURL(storageRef);
+}
+
+await addDoc(collection(db,"posts"),{
+title,
+problem,
+solution,
+img: imageUrl,
+user: localStorage.getItem("username"),
+likes: 0,
+created: new Date()
 });
 
-alert("Post added successfully!");
-
-window.location = "index.html";
+alert("Posted!");
+window.location="index.html";
 }
 
 </script>

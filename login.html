@@ -1,87 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:#0f172a;
-color:white;
-font-family:Arial;
-}
-
-.card{
-background:#020617;
-padding:30px;
-border-radius:10px;
-width:300px;
-text-align:center;
-}
-
-input{
-width:100%;
-padding:10px;
-margin:10px 0;
-background:#1e293b;
-border:none;
-color:white;
-}
-
-button{
-width:100%;
-padding:10px;
-background:#2563EB;
-color:white;
-border:none;
-}
-</style>
+    <title>Login • ProblemHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-box { width: 350px; background: var(--ig-bg); border: 1px solid var(--ig-border); padding: 40px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 5px 0; background: #121212; border: 1px solid var(--ig-border); color: white; border-radius: 3px; box-sizing: border-box; }
+    </style>
 </head>
-
 <body>
+    <div class="login-box">
+        <h1 style="font-family: Arial; margin-bottom: 30px;">ProblemHub</h1>
+        <input id="email" type="email" placeholder="Phone number, username, or email">
+        <input id="pass" type="password" placeholder="Password">
+        <button class="ig-btn" style="width: 100%; margin-top: 15px;" onclick="login()">Log In</button>
+        <p style="margin-top: 30px; color: var(--ig-secondary-text);">Don't have an account? <a href="signup.html" style="color: var(--ig-link); text-decoration: none;">Sign up</a></p>
+    </div>
 
-<div class="card">
-<h2>Login</h2>
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-
-<a href="signup.html">Create account</a>
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
-  authDomain: "problemhub-76fbf.firebaseapp.com",
-  projectId: "problemhub-76fbf",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.login = function(){
-const email = document.getElementById("email").value;
-const pass = document.getElementById("pass").value;
-
-signInWithEmailAndPassword(auth, email, pass)
-.then(()=>{
-localStorage.setItem("username", email);
-window.location="index.html";
-})
-.catch(()=>alert("Login failed"));
-}
-
-</script>
-
+        window.login = function() {
+            const email = document.getElementById("email").value;
+            const pass = document.getElementById("pass").value;
+            signInWithEmailAndPassword(auth, email, pass)
+                .then(() => {
+                    localStorage.setItem("username", email.split('@')[0]);
+                    window.location="index.html";
+                })
+                .catch(e => alert("Login Error: " + e.message));
+        }
+    </script>
 </body>
 </html>

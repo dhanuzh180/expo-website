@@ -172,7 +172,7 @@ onSnapshot(q, (snapshot) => {
                 <b>${p.user}</b>
             </div>
 
-            <img src="${p.img}">
+${p.img ? `<img src="${p.img}">` : ""}
 
             <div class="post-content">
                 <h3>${p.title}</h3>

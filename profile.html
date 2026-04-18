@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Profile</title>
-<style>
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-text-align:center;
-}
-
-.avatar{
-width:100px;
-height:100px;
-border-radius:50%;
-background:#2563EB;
-margin:20px auto;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px;
-}
-</style>
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-
 <body>
+    <div class="top-nav">
+        <div class="username" id="topName">username</div>
+        <i class="fa-solid fa-bars"></i>
+    </div>
 
-<div class="avatar" id="avatar"></div>
-<h2 id="name"></h2>
+    <div style="margin-top: 60px; padding: 0 16px;">
+        <div style="display:flex; align-items:center; margin-bottom: 20px;">
+            <div style="width:80px; height:80px; background:var(--ig-surface); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;" id="avatar"></div>
+            <div style="margin-left: 30px; display: flex; gap: 20px; text-align: center;">
+                <div><b>12</b><br><span style="font-size:12px; color:var(--ig-secondary-text);">Posts</span></div>
+                <div><b>450</b><br><span style="font-size:12px; color:var(--ig-secondary-text);">Followers</span></div>
+                <div><b>320</b><br><span style="font-size:12px; color:var(--ig-secondary-text);">Following</span></div>
+            </div>
+        </div>
+        <div style="font-weight:bold;" id="fullName">Student Name</div>
+        <div style="font-size:14px;">BCom IT | Building Solutions</div>
+        <button class="ig-btn" style="width:100%; background:#363636; color:white; margin-top:15px;" onclick="localStorage.clear(); window.location='login.html'">Log out</button>
+    </div>
 
-<script>
-const user = localStorage.getItem("username") || "Guest";
+    <div class="profile-grid" id="profileGrid">
+        </div>
 
-document.getElementById("name").innerText = user;
-document.getElementById("avatar").innerText = user.charAt(0);
-</script>
+    <div class="bottom-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i></a>
+        <a href="problems.html"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="post.html"><i class="fa-regular fa-square-plus"></i></a>
+        <a href="profile.html"><i class="fa-solid fa-circle-user"></i></a>
+    </div>
 
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+        const user = localStorage.getItem("username");
+        document.getElementById("topName").innerText = user;
+        document.getElementById("fullName").innerText = user;
+        document.getElementById("avatar").innerText = user.charAt(0).toUpperCase();
+
+        const grid = document.getElementById("profileGrid");
+        const q = query(collection(db, "posts"), where("user", "==", user));
+
+        const loadGrid = async () => {
+            const snap = await getDocs(q);
+            snap.forEach(doc => {
+                grid.innerHTML += `<div class="grid-item"><img src="${doc.data().img}"></div>`;
+            });
+        };
+        loadGrid();
+    </script>
 </body>
 </html>

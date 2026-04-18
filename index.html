@@ -1,217 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ProblemHub</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-
-body {
-    margin:0;
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-}
-
-/* NAVBAR */
-.navbar {
-    <a href="chat.html">💬</a>
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px;
-    background:#020617;
-    border-bottom:1px solid #1e293b;
-}
-
-.navbar a {
-    color:white;
-    margin-left:15px;
-    font-size:20px;
-}
-
-/* FEED */
-#feed {
-    max-width:500px;
-    margin:auto;
-}
-
-/* POST */
-.post {
-    background:#020617;
-    border:1px solid #1e293b;
-    border-radius:12px;
-    margin:20px;
-    overflow:hidden;
-}
-
-/* HEADER */
-.post-header {
-    display:flex;
-    align-items:center;
-    padding:10px;
-}
-
-.avatar {
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#2563EB;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-right:10px;
-}
-
-/* IMAGE */
-.post img {
-    width:100%;
-    height:250px;
-    object-fit:cover;
-}
-
-/* CONTENT */
-.post-content {
-    padding:10px;
-}
-
-/* ACTIONS */
-.actions {
-    display:flex;
-    justify-content:space-between;
-    padding:10px;
-}
-
-.actions button {
-    background:none;
-    border:none;
-    color:white;
-    cursor:pointer;
-}
-
-/* COMMENT */
-.comment-box {
-    padding:10px;
-}
-
-.comment-box input {
-    width:70%;
-    padding:8px;
-    border-radius:6px;
-    border:none;
-}
-
-.comment-box button {
-    padding:8px;
-    border:none;
-    background:#2563EB;
-    color:white;
-    border-radius:6px;
-}
-
-</style>
-
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="navbar">
 <h2>ProblemHub</h2>
-
 <div>
-<a href="post.html"><i class="fa-solid fa-plus"></i></a>
-<a href="profile.html"><i class="fa-solid fa-user"></i></a>
+<a href="post.html">+</a>
+<a href="chat.html">💬</a>
+<a href="profile.html">👤</a>
 </div>
 </div>
 
 <div id="feed"></div>
 
 <script type="module">
+import { db } from "./firebase-config.js";
+import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔐 LOGIN PROTECTION
-if(!localStorage.getItem("username")){
-    window.location="login.html";
-}
+const feed=document.getElementById("feed");
 
-// 🔥 FIREBASE IMPORTS
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+onSnapshot(collection(db,"posts"), snap=>{
+feed.innerHTML="";
+snap.forEach(doc=>{
+let p=doc.data();
 
-// 🔥 CONFIG
-const firebaseConfig = {
-  apiKey: "AIzaSyBBIn4FGYCn3u2uCrvrcjYkwI6uCzoL7C0",
-  authDomain: "problemhub-76fbf.firebaseapp.com",
-  projectId: "problemhub-76fbf",
-  storageBucket: "problemhub-76fbf.firebasestorage.app",
-  messagingSenderId: "138908127292",
-  appId: "1:138908127292:web:8ee821465df09575eb7339"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const feed = document.getElementById("feed");
-
-// 🔥 LOAD POSTS
-const q = query(collection(db, "posts"), orderBy("created", "desc"));
-
-onSnapshot(q, (snapshot) => {
-    feed.innerHTML = "";
-
-    snapshot.forEach((docSnap) => {
-        const p = docSnap.data();
-        const id = docSnap.id;
-
-        feed.innerHTML += `
-        <div class="post">
-
-            <div class="post-header">
-                <div class="avatar">${p.user?.charAt(0) || "U"}</div>
-                <b>${p.user}</b>
-            </div>
-
-${p.img ? `<img src="${p.img}">` : ""}
-
-            <div class="post-content">
-                <h3>${p.title}</h3>
-                <p><b>Problem:</b> ${p.problem}</p>
-                <p><b>Solution:</b> ${p.solution}</p>
-            </div>
-
-            <div class="actions">
-                <button onclick="likePost('${id}')">
-                    ❤️ ${p.likes || 0}
-                </button>
-            </div>
-
-            <div class="comment-box">
-                <input id="c-${id}" placeholder="Add comment...">
-                <button onclick="addComment('${id}')">Post</button>
-            </div>
-
-        </div>
-        `;
-    });
+feed.innerHTML+=`
+<div class="card">
+<h3>${p.title}</h3>
+${p.img?`<img src="${p.img}" width="100%">`:``}
+<p>${p.problem}</p>
+<p>${p.solution}</p>
+</div>
+`;
 });
-
-// ❤️ LIKE SYSTEM
-window.likePost = async function(id){
-    const ref = doc(db, "posts", id);
-    await updateDoc(ref, {
-        likes: increment(1)
-    });
-}
-
-// 💬 COMMENT (UI DEMO)
-window.addComment = function(id){
-    const text = document.getElementById("c-"+id).value;
-    if(text){
-        alert("Comment: " + text);
-    }
-}
-
+});
 </script>
 
 </body>
